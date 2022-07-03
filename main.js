@@ -1,4 +1,4 @@
-playGame();
+//playGame();
 
 //  get input from the user
 function userPlay(roundPrompt) {
