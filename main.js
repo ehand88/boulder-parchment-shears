@@ -80,3 +80,6 @@ function playGame() {
     console.log((playerScore === 5) ? 'You win!' : 'You lose!');
 
 }
+
+const bpsButtons = document.querySelectorAll('.bpsInputs > input');
+bpsButtons.forEach(button => button.addEventListener('click',() => console.log(button)));
