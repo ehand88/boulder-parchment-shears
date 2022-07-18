@@ -6,12 +6,13 @@ function playGame() {
     const SCORE_TO_WIN = 5;
     let playerScore = 0;
     let computerScore = 0;
+    let resultsData;
 
 // Determine which input the user clicks
     const bpsButtons = document.querySelectorAll('.bpsInputs > input');
     const playerBoard = document.querySelector('.board.player');
     const computerBoard = document.querySelector('.board.computer');
-    // const resultsTable = document.querySelector('.board.computer');
+    const resultsTable = document.querySelector('.results-table');
 
 
     bpsButtons.forEach(button => button.addEventListener('click',() => {
@@ -22,12 +23,12 @@ function playGame() {
         const roundResult = determineWinner(playerPlay, computerPlay);
         playerScore += (roundResult === 'win') ? 1 : 0;
         computerScore += (roundResult === 'lose') ? 1 : 0;
-        const resultsData = (`Computer chooses ${computerPlay}. You ${roundResult}!`);
+        resultsData = (`Computer chooses ${computerPlay}. Player ${roundResult}s round!`);
 
 // populate boards
         updateBoard(playerBoard, playerPlay, playerScore);   
         updateBoard(computerBoard, computerPlay, computerScore);
-        updateTable(resultsData);
+        updateTable(resultsTable, resultsData);
 
 // determine if game winner decided yet
     }));
@@ -35,12 +36,12 @@ function playGame() {
 
 function updateBoard(boardElement, selection, score) {
     boardElement.querySelector('img').src =`images/${selection}.svg`;
-    boardElement.querySelector('p').innerText = `Computer selects ${selection}`;
+    boardElement.querySelector('p').innerText = `${selection}`;
     boardElement.querySelector('.score').innerText = `${score}`;
 }
 
-function updateTable(tableData) {
-
+function updateTable(tableElement, tableData) {
+    tableElement.querySelector('p').innerText += `${tableData}\n`;
 }
 
 
