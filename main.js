@@ -1,44 +1,55 @@
 // declare global vars (bad practice, but I struggled to think of a better way)
-const SCORE_TO_WIN = 5;
-let playerScore = 0;
-let computerScore = 0;
 
-initializeGame();
+playGame();
 
-function initializeGame() {
-    playerScore = 0;
-    computerScore = 0;
+function playGame() {
+    const SCORE_TO_WIN = 5;
+    let playerScore = 0;
+    let computerScore = 0;
 
 // Determine which input the user clicks
     const bpsButtons = document.querySelectorAll('.bpsInputs > input');
     const playerBoard = document.querySelector('.board.player');
+    const computerBoard = document.querySelector('.board.computer');
 
-    const playerSelectionImg = document.querySelector('.board.player > img'); 
-    const playerSelectionLabel = document.querySelector('.board.player > img'); 
 
     bpsButtons.forEach(button => button.addEventListener('click',() => {
-        console.log(button);
-        console.log(playerSelectionImg);
+        const playerPlay = button.id.valueOf();
+        const computerPlay = determineComputerPlay();
 
-        playerBoard.querySelector('img').src = 'images/boulder.svg';
-        playerBoard.querySelector('p').innerText = 'Player selects ...';   
+        populateBoard(playerBoard,playerPlay);   
+
+        // populate computer board
+        const roundResult = determineWinner(playerPlay, computerPlay);
+        console.log(playerPlay, computerPlay, roundResult);
+        populateBoard(computerBoard,computerPlay);
+
+        // populate round results
+        playerScore += (roundResult === 'win') ? 1 : 0;
+        computerScore += (roundResult === 'lose') ? 1 : 0;
+        console.log(`Computer chooses ${computerPlay}. You ${roundResult}!`);
+        console.log(playerScore, computerScore);
+        // determine if game winner decided yet
     }));
 };
 
+function populateBoard(boardElement,boardData) {
+    boardElement.querySelector('img').src =`images/${boardData}.svg`;
+    boardElement.querySelector('p').innerText = `Computer selects ${boardData}`;   
+
+}
+
 
 //  get random number, 1-3, for computer
-function computerPlay() {
+function determineComputerPlay() {
     let randInt = Math.floor(Math.random()*3) +1;
     switch (randInt) {
         case 1:
             return 'boulder';
-            break;
         case 2:
             return 'parchment';
-            break;
         case 3:
-            return 'Shears';
-            break;
+            return 'shears';
     }
 }
 
@@ -52,7 +63,7 @@ function determineWinner(playerChoice,computerChoice) {
     else {
         switch (playerChoice) {
             case 'boulder':
-                if (computerChoice === 'Shears') {
+                if (computerChoice === 'shears') {
                     result = 'win';
                 }
                 break;
@@ -61,7 +72,7 @@ function determineWinner(playerChoice,computerChoice) {
                     result = 'win';
                 }
                 break;
-            case 'Shears':
+            case 'shears':
                 if (computerChoice === 'parchment') {
                     result = 'win';
                 }
@@ -82,9 +93,7 @@ function playRound(playerSelection) {
 
     computerSelection = computerPlay();
     roundResult = playRound(playerSelection,computerSelection);
-    playerScore += (roundResult === 'win') ? 1 : 0;
-    computerScore += (roundResult === 'lose') ? 1 : 0;
-    console.log(`Computer chooses ${computerSelection}. You ${roundResult}!`);
+    
     
     roundPrompt = `The score is player: ${playerScore} to computer: ${computerScore}`;
 
