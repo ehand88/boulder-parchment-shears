@@ -8,10 +8,11 @@
     justify-content: center;
 }
 
-.roundBoard {
+.scoreboard {
     display: flex;
     justify-content: center;
     gap: 48px;
+    text-align: center;
 }
 
 .board {
@@ -23,11 +24,7 @@
     border: 1px solid red;
 }
 
-label {
-    text-align: center;
-}
-
-h3 {
-    text-align: center;
-
+.score {
+    font-size: 48px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }

@@ -11,31 +11,35 @@ function playGame() {
     const bpsButtons = document.querySelectorAll('.bpsInputs > input');
     const playerBoard = document.querySelector('.board.player');
     const computerBoard = document.querySelector('.board.computer');
+    // const resultsTable = document.querySelector('.board.computer');
 
 
     bpsButtons.forEach(button => button.addEventListener('click',() => {
         const playerPlay = button.id.valueOf();
         const computerPlay = determineComputerPlay();
 
-        populateBoard(playerBoard,playerPlay);   
-
-        // populate computer board
+// populate round results
         const roundResult = determineWinner(playerPlay, computerPlay);
-        console.log(playerPlay, computerPlay, roundResult);
-        populateBoard(computerBoard,computerPlay);
-
-        // populate round results
         playerScore += (roundResult === 'win') ? 1 : 0;
         computerScore += (roundResult === 'lose') ? 1 : 0;
-        console.log(`Computer chooses ${computerPlay}. You ${roundResult}!`);
-        console.log(playerScore, computerScore);
-        // determine if game winner decided yet
+        const resultsData = (`Computer chooses ${computerPlay}. You ${roundResult}!`);
+
+// populate boards
+        updateBoard(playerBoard, playerPlay, playerScore);   
+        updateBoard(computerBoard, computerPlay, computerScore);
+        updateTable(resultsData);
+
+// determine if game winner decided yet
     }));
 };
 
-function populateBoard(boardElement,boardData) {
-    boardElement.querySelector('img').src =`images/${boardData}.svg`;
-    boardElement.querySelector('p').innerText = `Computer selects ${boardData}`;   
+function updateBoard(boardElement, selection, score) {
+    boardElement.querySelector('img').src =`images/${selection}.svg`;
+    boardElement.querySelector('p').innerText = `Computer selects ${selection}`;
+    boardElement.querySelector('.score').innerText = `${score}`;
+}
+
+function updateTable(tableData) {
 
 }
 
@@ -63,19 +67,13 @@ function determineWinner(playerChoice,computerChoice) {
     else {
         switch (playerChoice) {
             case 'boulder':
-                if (computerChoice === 'shears') {
-                    result = 'win';
-                }
+                if(computerChoice === 'shears') { result = 'win' };
                 break;
             case 'parchment':
-                if (computerChoice === 'boulder') {
-                    result = 'win';
-                }
+                if (computerChoice === 'boulder') { result = 'win'; }
                 break;
             case 'shears':
-                if (computerChoice === 'parchment') {
-                    result = 'win';
-                }
+                if (computerChoice === 'parchment') { result = 'win'; }
                 break;
         }  
     }
