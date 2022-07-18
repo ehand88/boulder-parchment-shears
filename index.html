@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <link rel='stylesheet' href='styles.css'>
-    <script src='main.js' defer></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js" defer></script>
 
     <title>Rock, Paper, Scissors</title>
 </head>
 <body>
 <!-- display header explaining the rules -->
-    <div class='header'><h1>Boulder, Parchment, Shears</h1></div>
+    <div class="header"><h1>Boulder, Parchment, Shears</h1></div>
     <p>Hear ye! A bout of Boulder, Parchment, Shears has been declared. The rules are quite simple.</p>
     <ul>
         <li>Boulder beats Shears.</li>
@@ -20,10 +20,24 @@
     </ul>
     <p>May the best duelist win!</p>
 <!-- user input buttons -->
-    <div class='bpsInputs'>
-        <input type='image' src='images/boulder.svg' name='boulder' id='boulder' width='200px' class='bpsButton' />
-        <input type='image' src='images/parchment.svg' name='parchment' id='parchment' width='200px' class='bpsButton' />
-        <input type='image' src='images/shears.svg' name='shears' id='shears' width='200px' class='bpsButton' />
+    <div class="bpsInputs">
+        <input type="image" src="images/boulder.svg" name="boulder" id="boulder" width="200px" class="bpsButton" />
+        <input type="image" src="images/parchment.svg" name="parchment" id="parchment" width="200px" class="bpsButton" />
+        <input type="image" src="images/shears.svg" name="shears" id="shears" width="200px" class="bpsButton" />
+    </div>
+
+<!-- display selections and round results-->
+    <div class="roundBoard">
+        <div class="board player">
+            <h3>Player</h3>
+            <img src="images/bouncing-ball.svg">
+            <p>Waiting on user input...</p>
+        </div>
+        <div class="board computer">
+            <h3>Computer</h3>
+            <img src="images/bouncing-ball.svg">
+            <p>Calculating opponent input...</p>
+        </div>
     </div>
 <!-- add round result to results table, 
     if number of wins = 5 then declare winner, else continue-->

@@ -7,3 +7,27 @@
     display: flex;
     justify-content: center;
 }
+
+.roundBoard {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+}
+
+.board {
+    display: flex;
+    flex-direction: column;
+    /* flex: 0 1 auto; */
+    height: 100px;
+    width: 100px;
+    border: 1px solid red;
+}
+
+label {
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+
+}
