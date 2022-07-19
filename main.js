@@ -6,7 +6,7 @@ function playGame() {
     const SCORE_TO_WIN = 5;
     let playerScore = 0;
     let computerScore = 0;
-    let resultsData;
+    let resultsData = [];
 
 // Determine which input the user clicks
     const bpsButtons = document.querySelectorAll('.bpsInputs > input');
@@ -21,10 +21,17 @@ function playGame() {
 
 // populate round results
         const roundResult = determineWinner(playerPlay, computerPlay);
-        playerScore += (roundResult === 'win') ? 1 : 0;
-        computerScore += (roundResult === 'lose') ? 1 : 0;
-        resultsData = (`Computer chooses ${computerPlay}. Player ${roundResult}s round!`);
+        playerScore += (roundResult === 'player') ? 1 : 0;
+        computerScore += (roundResult === 'computer') ? 1 : 0;
+        resultsData.unshift(`Computer chooses ${computerPlay}. ${roundResult.toUpperCase()} wins the round!`);
 
+// calculate stats - total rounds; total r,b,s; ratio r,b,s; wins/losses
+
+// stylize boards
+        clearBoardStyle([playerBoard, computerBoard]);
+        if(roundResult !== 'tie') {
+            stylizeWinnerBoard(`${roundResult}Board`);
+        }
 // populate boards
         updateBoard(playerBoard, playerPlay, playerScore);   
         updateBoard(computerBoard, computerPlay, computerScore);
@@ -34,6 +41,15 @@ function playGame() {
     }));
 };
 
+function stylizeWinnerBoard(winnerBoard) {
+    winnerBoard.setAttribute('.winner');
+}
+
+function clearBoardStyle(boardsToClear) {
+    const boards = Array.from(boardsToClear);
+    boards.forEach((board) => board.removeAttribute('.winner'));
+}
+
 function updateBoard(boardElement, selection, score) {
     boardElement.querySelector('img').src =`images/${selection}.svg`;
     boardElement.querySelector('p').innerText = `${selection}`;
@@ -41,7 +57,13 @@ function updateBoard(boardElement, selection, score) {
 }
 
 function updateTable(tableElement, tableData) {
-    tableElement.querySelector('p').innerText += `${tableData}\n`;
+    // tableElement.querySelector('p').innerText += `${tableData}\n`;
+    const tableP = tableElement.querySelector('p');
+    tableP.innerText = '';
+    const tenResults = tableData.slice(0,10);
+    tenResults.forEach((result) => {
+        tableP.innerText += `${result}\n`;
+    } );
 }
 
 
@@ -61,20 +83,20 @@ function determineComputerPlay() {
 
 //  compare inputs to determine winner of round
 function determineWinner(playerChoice,computerChoice) {
-    let result = 'lose';
+    let result = 'computer';
     if (playerChoice === computerChoice) {
             result = 'tie';
     }
     else {
         switch (playerChoice) {
             case 'boulder':
-                if(computerChoice === 'shears') { result = 'win' };
+                if(computerChoice === 'shears') { result = 'player' };
                 break;
             case 'parchment':
-                if (computerChoice === 'boulder') { result = 'win'; }
+                if (computerChoice === 'boulder') { result = 'player'; }
                 break;
             case 'shears':
-                if (computerChoice === 'parchment') { result = 'win'; }
+                if (computerChoice === 'parchment') { result = 'player'; }
                 break;
         }  
     }
