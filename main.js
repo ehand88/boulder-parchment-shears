@@ -30,7 +30,7 @@ function playGame() {
 // stylize boards
         clearBoardStyle([playerBoard, computerBoard]);
         if(roundResult !== 'tie') {
-            stylizeWinnerBoard(`${roundResult}Board`);
+            stylizeWinnerBoard(roundResult);
         }
 // populate boards
         updateBoard(playerBoard, playerPlay, playerScore);   
@@ -41,13 +41,14 @@ function playGame() {
     }));
 };
 
-function stylizeWinnerBoard(winnerBoard) {
-    winnerBoard.setAttribute('.winner');
+function stylizeWinnerBoard(winner) {
+    const winnerBoard = document.querySelector(`.board.${winner}`);
+    winnerBoard.classList.add('winner');
 }
 
 function clearBoardStyle(boardsToClear) {
     const boards = Array.from(boardsToClear);
-    boards.forEach((board) => board.removeAttribute('.winner'));
+    boards.forEach((board) => board.classList.remove('winner'));
 }
 
 function updateBoard(boardElement, selection, score) {

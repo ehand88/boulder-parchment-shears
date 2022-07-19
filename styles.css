@@ -20,7 +20,7 @@
     flex-direction: column;
     flex: 0 1 auto;
     width: 200px;
-    border: 1px solid red;
+    border: 10px solid black;
 }
 
 .board > img {
