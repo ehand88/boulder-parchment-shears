@@ -8,28 +8,40 @@
     justify-content: center;
 }
 
-.scoreboard {
+.boards {
     display: flex;
-    justify-content: center;
-    gap: 48px;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
     text-align: center;
 }
 
 .board {
     display: flex;
+    justify-content: space-around;
+    width: 500px;
+}
+
+.player, .computer {
+    display: flex;
     flex-direction: column;
-    flex: 0 1 auto;
-    width: 200px;
+    flex: 3;
+}
+
+.middle-column {
+    flex: 2;
+}
+
+.play-board {
     border: 10px solid black;
 }
 
-.board > img {
+.selection {
     height: 64px;
 }
 
 .results-table {
-    display: flex;
-    flex-direction: column;
+    width: 500px;
     align-items: center;
     text-align: center;
 }
@@ -40,5 +52,13 @@
 }
 
 .winner {
-    border: 10px solid gold;
+    background-color: gold;
+}
+
+.highlight {
+    background-color: gold;
+}
+
+th, td {
+    width: 30%;
 }

@@ -6,14 +6,12 @@ function playGame() {
     const SCORE_TO_WIN = 5;
     let playerScore = 0;
     let computerScore = 0;
-    let resultsData = [];
+    let playerResults = [];
+    let computerResults = [];
+    let roundResults = [];
 
 // Determine which input the user clicks
     const bpsButtons = document.querySelectorAll('.bpsInputs > input');
-    const playerBoard = document.querySelector('.board.player');
-    const computerBoard = document.querySelector('.board.computer');
-    const resultsTable = document.querySelector('.results-table');
-
 
     bpsButtons.forEach(button => button.addEventListener('click',() => {
         const playerPlay = button.id.valueOf();
@@ -23,48 +21,68 @@ function playGame() {
         const roundResult = determineWinner(playerPlay, computerPlay);
         playerScore += (roundResult === 'player') ? 1 : 0;
         computerScore += (roundResult === 'computer') ? 1 : 0;
-        resultsData.unshift(`Computer chooses ${computerPlay}. ${roundResult.toUpperCase()} wins the round!`);
+        playerResults.unshift([playerPlay, playerScore]);
+        computerResults.unshift([computerPlay, computerScore]);
+        roundResults.unshift(roundResult);
 
 // calculate stats - total rounds; total r,b,s; ratio r,b,s; wins/losses
 
 // stylize boards
-        clearBoardStyle([playerBoard, computerBoard]);
+        clearBoardStyle('.play-board > div', 'winner');
         if(roundResult !== 'tie') {
             stylizeWinnerBoard(roundResult);
         }
 // populate boards
-        updateBoard(playerBoard, playerPlay, playerScore);   
-        updateBoard(computerBoard, computerPlay, computerScore);
-        updateTable(resultsTable, resultsData);
+        updateBoards('player', playerPlay, playerScore);
+        updateBoards('computer', computerPlay, computerScore);
+        updateResults(playerResults[0], computerResults[0], roundResults[0]);
 
 // determine if game winner decided yet
     }));
 };
 
 function stylizeWinnerBoard(winner) {
-    const winnerBoard = document.querySelector(`.board.${winner}`);
+    const winnerBoard = document.querySelector(`.play-board > .${winner}`);
     winnerBoard.classList.add('winner');
 }
 
-function clearBoardStyle(boardsToClear) {
-    const boards = Array.from(boardsToClear);
-    boards.forEach((board) => board.classList.remove('winner'));
+function clearBoardStyle(query,classToRemove) {
+    const els = document.querySelectorAll(query);
+    els.forEach(el => el.classList.remove(classToRemove));
 }
 
-function updateBoard(boardElement, selection, score) {
-    boardElement.querySelector('img').src =`images/${selection}.svg`;
-    boardElement.querySelector('p').innerText = `${selection}`;
-    boardElement.querySelector('.score').innerText = `${score}`;
+function updateBoards(entity, selection, score) {
+    document.querySelector(`.${entity} > .selection`).src =`images/${selection}.svg`;
+    document.querySelector(`.${entity} > .caption`).innerText = `${selection}`;
+    document.querySelector(`.${entity} > .score`).innerText = `${score}`;
 }
 
-function updateTable(tableElement, tableData) {
-    // tableElement.querySelector('p').innerText += `${tableData}\n`;
-    const tableP = tableElement.querySelector('p');
-    tableP.innerText = '';
-    const tenResults = tableData.slice(0,10);
-    tenResults.forEach((result) => {
-        tableP.innerText += `${result}\n`;
-    } );
+function updateResults(playerData, computerData, resultData) {
+    const resultsTable = document.querySelector('.results-table > tbody');
+    
+    const tRow = document.createElement('tr');
+    const tDataPlayer = document.createElement('td');
+    const tDataResult = document.createElement('td');
+    const tDataComputer = document.createElement('td');
+
+    tDataPlayer.innerText = `${playerData[0]}`;
+    tDataResult.innerText = `${resultData.toUpperCase()}`;
+    tDataComputer.innerText = `${computerData[0]}`;
+
+    if(resultData !== 'tie') {
+        (resultData === 'player') ? tDataPlayer.classList.add('highlight') : tDataComputer.classList.add('highlight');
+    }
+
+    tRow.appendChild(tDataPlayer);
+    tRow.appendChild(tDataResult);
+    tRow.appendChild(tDataComputer);
+
+    resultsTable.insertBefore(tRow,resultsTable.children[0]);
+
+    const tRows = document.querySelectorAll('tr');
+    if(tRows.length > 11) {
+        resultsTable.removeChild(tRows[11]);
+    }
 }
 
 
