@@ -11,19 +11,18 @@
 </head>
 <body>
 <!-- display header explaining the rules -->
-    <div class="header"><h1>Boulder, Parchment, Shears</h1></div>
-    <p>Hear ye! A bout of Boulder, Parchment, Shears has been declared. The rules are quite simple.</p>
-    <ul>
-        <li>Boulder beats Shears.</li>
-        <li>Parchment beats Boulder</li>
-        <li>Shears beats Parchment</li>
-    </ul>
-    <p>May the best duelist win!</p>
+    <div class="header">
+        <h1>Boulder, Parchment, Shears</h1>
+        <p>Hear ye! A bout of Boulder, Parchment, Shears has been declared. The rules are quite simple:</p>
+        <p>Boulder beats Shears. Parchment beats Boulder. Shears beats Parchment.<p>
+        <p>Choose wisely!</p>
+        <button class="btn-start" name="btnStart" id="btnStart" onclick="playGame()" >Start Game</button>
+    </div>
 <!-- user input buttons -->
     <div class="bpsInputs">
-        <input type="image" src="images/boulder.svg" name="boulder" id="boulder" width="200px" class="bpsButton" />
-        <input type="image" src="images/parchment.svg" name="parchment" id="parchment" width="200px" class="bpsButton" />
-        <input type="image" src="images/shears.svg" name="shears" id="shears" width="200px" class="bpsButton" />
+        <input type="image" src="images/boulder.svg" name="boulder" id="boulder" width="200px" disabled/>
+        <input type="image" src="images/parchment.svg" name="parchment" id="parchment" width="200px" disabled/>
+        <input type="image" src="images/shears.svg" name="shears" id="shears" width="200px" disabled/>
     </div>
 
 <!-- display scoreboard -->
@@ -57,7 +56,7 @@
             <thead>
                 <tr>
                     <th>Player</th>
-                    <th>Winner</th>
+                    <th></th>
                     <th>Computer</th>
                 </tr>
             </thead>

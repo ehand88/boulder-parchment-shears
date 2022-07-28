@@ -1,11 +1,14 @@
 .header {
-    display: flex;
-    justify-content: center;
+   text-align: center;
 }
 
 .bpsInputs {
     display: flex;
     justify-content: center;
+}
+
+.bpsButton {
+    transition: all 0.2s;
 }
 
 .boards {
@@ -26,6 +29,7 @@
     display: flex;
     flex-direction: column;
     flex: 3;
+    padding: 4px;
 }
 
 .middle-column {
@@ -61,4 +65,12 @@
 
 th, td {
     width: 30%;
+}
+
+.bpsButton:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(6px 10px 4px rgb(0 0 0 / 0.4));
+    /* change svg color ref: https://stackoverflow.com/questions/22252472/how-to-change-the-color-of-an-svg-element */
+    /* filter: invert(86%) sepia(17%) saturate(5329%) hue-rotate(347deg) brightness(91%) contrast(85%); */
+    fill:#daa520
 }

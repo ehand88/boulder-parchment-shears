@@ -1,7 +1,5 @@
 // declare global vars (bad practice, but I struggled to think of a better way)
 
-playGame();
-
 function playGame() {
     const SCORE_TO_WIN = 5;
     let playerScore = 0;
@@ -13,7 +11,10 @@ function playGame() {
 // Determine which input the user clicks
     const bpsButtons = document.querySelectorAll('.bpsInputs > input');
 
-    bpsButtons.forEach(button => button.addEventListener('click',() => {
+    bpsButtons.forEach(button => {
+        button.removeAttribute('disabled','');
+        button.classList.add('bpsButton');
+        button.addEventListener('click', function playRound() {
         const playerPlay = button.id.valueOf();
         const computerPlay = determineComputerPlay();
 
@@ -27,19 +28,34 @@ function playGame() {
 
 // calculate stats - total rounds; total r,b,s; ratio r,b,s; wins/losses
 
-// stylize boards
-        clearBoardStyle('.play-board > div', 'winner');
-        if(roundResult !== 'tie') {
-            stylizeWinnerBoard(roundResult);
-        }
 // populate boards
         updateBoards('player', playerPlay, playerScore);
         updateBoards('computer', computerPlay, computerScore);
         updateResults(playerResults[0], computerResults[0], roundResults[0]);
 
+// stylize boards
+        clearBoardStyle('.play-board > div', 'winner');
+        if(roundResult !== 'tie') {
+            stylizeWinnerBoard(roundResult);
+        }
+ 
 // determine if game winner decided yet
-    }));
+        if(playerScore === SCORE_TO_WIN || computerScore === SCORE_TO_WIN) {
+            (playerScore === SCORE_TO_WIN) ? declareWinner('player') : declareWinner('computer');
+            // remove event listener
+            console.log(bpsButtons);
+            bpsButtons.forEach(button => {
+                 button.removeEventListener('click', playRound);
+                 button.setAttribute('disabled','');
+                 button.classList.remove('bpsButton');
+            });
+        }
+    })});
 };
+
+function declareWinner(winner) {
+    document.querySelector('.score-board > .middle-column').innerText = `${winner.toUpperCase()} wins!`;
+}
 
 function stylizeWinnerBoard(winner) {
     const winnerBoard = document.querySelector(`.play-board > .${winner}`);
@@ -51,10 +67,10 @@ function clearBoardStyle(query,classToRemove) {
     els.forEach(el => el.classList.remove(classToRemove));
 }
 
-function updateBoards(entity, selection, score) {
-    document.querySelector(`.${entity} > .selection`).src =`images/${selection}.svg`;
-    document.querySelector(`.${entity} > .caption`).innerText = `${selection}`;
-    document.querySelector(`.${entity} > .score`).innerText = `${score}`;
+function updateBoards(entity, entitySelection, entityScore) {
+    document.querySelector(`.${entity} > .selection`).src =`images/${entitySelection}.svg`;
+    document.querySelector(`.${entity} > .caption`).innerText = `${entitySelection}`;
+    document.querySelector(`.${entity} > .score`).innerText = `${entityScore}`;
 }
 
 function updateResults(playerData, computerData, resultData) {
@@ -66,11 +82,18 @@ function updateResults(playerData, computerData, resultData) {
     const tDataComputer = document.createElement('td');
 
     tDataPlayer.innerText = `${playerData[0]}`;
-    tDataResult.innerText = `${resultData.toUpperCase()}`;
+    tDataResult.innerText = `[${playerData[1]}]   ===   [${computerData[1]}]`;
     tDataComputer.innerText = `${computerData[0]}`;
 
     if(resultData !== 'tie') {
-        (resultData === 'player') ? tDataPlayer.classList.add('highlight') : tDataComputer.classList.add('highlight');
+        
+        if(resultData === 'player') {
+            tDataPlayer.classList.add('highlight');
+            tDataResult.innerText =  `[${playerData[1]}]   <==   [${computerData[1]}]`; //⏮⏪◀⬅        
+         } else {
+            tDataComputer.classList.add('highlight');
+            tDataResult.innerText = `[${playerData[1]}]   ==>   [${computerData[1]}]`; //⏭⏩▶➡
+         }
     }
 
     tRow.appendChild(tDataPlayer);
@@ -122,26 +145,15 @@ function determineWinner(playerChoice,computerChoice) {
     return result;
 }
 
+/* just use css :hover instead
+document.querySelectorAll('.bpsButton').forEach((bps) => bps.addEventListener('pointerenter', function(e) {
+    this.classList.add('grow');
+}));
 
-/*  add round result to results table, 
-    if number of wins = 5 then declare winner, else continue */
-function playRound(playerSelection) {
-    let computerSelection = '';
-    let roundResult = '';
-    let roundPrompt = 'Choose wisely!';
-//    let roundLog = [];
-
-    computerSelection = computerPlay();
-    roundResult = playRound(playerSelection,computerSelection);
-    
-    
-    roundPrompt = `The score is player: ${playerScore} to computer: ${computerScore}`;
-
-
-    console.log('The bout is decided... ');
-    console.log((playerScore === 5) ? 'You win!' : 'You lose!');
-
-}
+document.querySelectorAll('.bpsButton').forEach((bps) => bps.addEventListener('pointerleave', function(e) {
+    this.classList.remove('grow');
+}));
+*/
 
 // Function to display results
 
