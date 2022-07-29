@@ -1,28 +1,59 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0px;
+}
 .header {
    text-align: center;
-}
-
-.bpsInputs {
-    display: flex;
-    justify-content: center;
-}
-
-.bpsButton {
-    transition: all 0.2s;
 }
 
 .boards {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     align-items: center;
-    gap: 32px;
+    gap: 16px;
     text-align: center;
+    border: 1px solid red;
 }
 
 .board {
     display: flex;
     justify-content: space-around;
+    flex-grow: 0;
     width: 500px;
+    border: 1px solid blue;
+}
+
+.buttons {
+    margin-bottom: 32px;
+}
+
+.bps-inputs {
+    display: flex;
+    justify-content: center;
+}
+
+.bps-button {
+    transform:scale(0);
+    transition: all 0.2s;
+}
+
+.btn-start {
+    margin: 16px;
+}
+
+.active {
+    transform: scale(1);
+}
+
+.active:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(6px 10px 4px rgb(0 0 0 / 0.4));
+    /* change svg color ref: https://stackoverflow.com/questions/22252472/how-to-change-the-color-of-an-svg-element */
+    /* filter: invert(86%) sepia(17%) saturate(5329%) hue-rotate(347deg) brightness(91%) contrast(85%); */
+    fill:#daa520
 }
 
 .player, .computer {
@@ -44,10 +75,16 @@
     height: 64px;
 }
 
+.results {
+    flex: 1 0 auto;
+}
+
 .results-table {
-    width: 500px;
-    align-items: center;
+    width: 100%;
+    height: 0%;
+    flex-grow: 0;
     text-align: center;
+    border-collapse: collapse;
 }
 
 .score {
@@ -63,14 +100,11 @@
     background-color: gold;
 }
 
+tr {
+    height: 20px;
+}
+
 th, td {
     width: 30%;
 }
 
-.bpsButton:hover {
-    transform: scale(1.2);
-    filter: drop-shadow(6px 10px 4px rgb(0 0 0 / 0.4));
-    /* change svg color ref: https://stackoverflow.com/questions/22252472/how-to-change-the-color-of-an-svg-element */
-    /* filter: invert(86%) sepia(17%) saturate(5329%) hue-rotate(347deg) brightness(91%) contrast(85%); */
-    fill:#daa520
-}

@@ -1,57 +1,62 @@
 // declare global vars (bad practice, but I struggled to think of a better way)
+const SCORE_TO_WIN = 5;
+const bpsButtons = document.querySelectorAll('.bps-inputs > input');
+let playerScore = 0;
+let computerScore = 0;
+let playerResults = [];
+let computerResults = [];
+let roundResults = [];
 
 function playGame() {
-    const SCORE_TO_WIN = 5;
-    let playerScore = 0;
-    let computerScore = 0;
-    let playerResults = [];
-    let computerResults = [];
-    let roundResults = [];
+    playerScore = 0;
+    computerScore = 0;
 
 // Determine which input the user clicks
-    const bpsButtons = document.querySelectorAll('.bpsInputs > input');
-
     bpsButtons.forEach(button => {
         button.removeAttribute('disabled','');
-        button.classList.add('bpsButton');
-        button.addEventListener('click', function playRound() {
-        const playerPlay = button.id.valueOf();
-        const computerPlay = determineComputerPlay();
+        button.classList.add('active');
+        button.addEventListener('click', playRound);
+    });
+    
+}
+
+function playRound() {
+    const button = this;
+    const playerPlay = button.id.valueOf();
+    const computerPlay = determineComputerPlay();
 
 // populate round results
-        const roundResult = determineWinner(playerPlay, computerPlay);
-        playerScore += (roundResult === 'player') ? 1 : 0;
-        computerScore += (roundResult === 'computer') ? 1 : 0;
-        playerResults.unshift([playerPlay, playerScore]);
-        computerResults.unshift([computerPlay, computerScore]);
-        roundResults.unshift(roundResult);
+    const roundResult = determineWinner(playerPlay, computerPlay);
+    playerScore += (roundResult === 'player') ? 1 : 0;
+    computerScore += (roundResult === 'computer') ? 1 : 0;
+    playerResults.unshift([playerPlay, playerScore]);
+    computerResults.unshift([computerPlay, computerScore]);
+    roundResults.unshift(roundResult);
 
 // calculate stats - total rounds; total r,b,s; ratio r,b,s; wins/losses
 
 // populate boards
-        updateBoards('player', playerPlay, playerScore);
-        updateBoards('computer', computerPlay, computerScore);
-        updateResults(playerResults[0], computerResults[0], roundResults[0]);
+    updateBoards('player', playerPlay, playerScore);
+    updateBoards('computer', computerPlay, computerScore);
+    updateResults(playerResults[0], computerResults[0], roundResults[0]);
 
 // stylize boards
-        clearBoardStyle('.play-board > div', 'winner');
-        if(roundResult !== 'tie') {
-            stylizeWinnerBoard(roundResult);
-        }
- 
+    clearBoardStyle('.play-board > div', 'winner');
+    if(roundResult !== 'tie') {
+        stylizeWinnerBoard(roundResult);
+    }
+
 // determine if game winner decided yet
-        if(playerScore === SCORE_TO_WIN || computerScore === SCORE_TO_WIN) {
-            (playerScore === SCORE_TO_WIN) ? declareWinner('player') : declareWinner('computer');
-            // remove event listener
-            console.log(bpsButtons);
-            bpsButtons.forEach(button => {
-                 button.removeEventListener('click', playRound);
-                 button.setAttribute('disabled','');
-                 button.classList.remove('bpsButton');
-            });
-        }
-    })});
-};
+    if(playerScore === SCORE_TO_WIN || computerScore === SCORE_TO_WIN) {
+        (playerScore === SCORE_TO_WIN) ? declareWinner('player') : declareWinner('computer');
+        // remove event listener;
+        bpsButtons.forEach(btn => {
+            btn.removeEventListener('click', playRound);
+            btn.setAttribute('disabled','');
+            btn.classList.remove('active');
+        });
+    }
+}
 
 function declareWinner(winner) {
     document.querySelector('.score-board > .middle-column').innerText = `${winner.toUpperCase()} wins!`;
@@ -75,6 +80,11 @@ function updateBoards(entity, entitySelection, entityScore) {
 
 function updateResults(playerData, computerData, resultData) {
     const resultsTable = document.querySelector('.results-table > tbody');
+// 
+    if(resultsTable.parentElement.clientHeight + 20 > resultsTable.parentElement.parentElement.clientHeight) {
+        const tRows = document.querySelectorAll('tr');
+        resultsTable.removeChild(tRows[tRows.length - 1]);
+    }
     
     const tRow = document.createElement('tr');
     const tDataPlayer = document.createElement('td');
@@ -101,11 +111,6 @@ function updateResults(playerData, computerData, resultData) {
     tRow.appendChild(tDataComputer);
 
     resultsTable.insertBefore(tRow,resultsTable.children[0]);
-
-    const tRows = document.querySelectorAll('tr');
-    if(tRows.length > 11) {
-        resultsTable.removeChild(tRows[11]);
-    }
 }
 
 
