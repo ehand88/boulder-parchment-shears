@@ -10,6 +10,7 @@ let roundResults = [];
 function playGame() {
     playerScore = 0;
     computerScore = 0;
+    clearStyle('.btn-start','active');
 
 // Determine which input the user clicks
     bpsButtons.forEach(button => {
@@ -17,7 +18,6 @@ function playGame() {
         button.classList.add('active');
         button.addEventListener('click', playRound);
     });
-    
 }
 
 function playRound() {
@@ -41,7 +41,7 @@ function playRound() {
     updateResults(playerResults[0], computerResults[0], roundResults[0]);
 
 // stylize boards
-    clearBoardStyle('.play-board > div', 'winner');
+    clearStyle('.play-board > div', 'winner');
     if(roundResult !== 'tie') {
         stylizeWinnerBoard(roundResult);
     }
@@ -49,17 +49,27 @@ function playRound() {
 // determine if game winner decided yet
     if(playerScore === SCORE_TO_WIN || computerScore === SCORE_TO_WIN) {
         (playerScore === SCORE_TO_WIN) ? declareWinner('player') : declareWinner('computer');
-        // remove event listener;
-        bpsButtons.forEach(btn => {
-            btn.removeEventListener('click', playRound);
-            btn.setAttribute('disabled','');
-            btn.classList.remove('active');
-        });
     }
 }
 
 function declareWinner(winner) {
     document.querySelector('.score-board > .middle-column').innerText = `${winner.toUpperCase()} wins!`;
+    const startButton = document.querySelector('.btn-start')
+    
+    if(winner === 'player') {
+        startButton.innerText = 'Defend Your Crown!';
+    } else {
+        startButton.innerText = 'Reclaim Your Honor!';
+    }
+
+    startButton.classList.add('active');
+
+    // remove event listener
+    bpsButtons.forEach(btn => {
+        btn.removeEventListener('click', playRound);
+        btn.setAttribute('disabled','');
+        btn.classList.remove('active');
+    });
 }
 
 function stylizeWinnerBoard(winner) {
@@ -67,7 +77,7 @@ function stylizeWinnerBoard(winner) {
     winnerBoard.classList.add('winner');
 }
 
-function clearBoardStyle(query,classToRemove) {
+function clearStyle(query,classToRemove) {
     const els = document.querySelectorAll(query);
     els.forEach(el => el.classList.remove(classToRemove));
 }
