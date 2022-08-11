@@ -1,8 +1,9 @@
 // declare global vars (bad practice, but I struggled to think of a better way)
 const SCORE_TO_WIN = 5;
-const bpsButtons = document.querySelectorAll('.bps-inputs > input');
+const bpsButtons = document.querySelectorAll('.bps-button');
 let playerScore = 0;
 let computerScore = 0;
+let round = 0;
 let playerResults = [];
 let computerResults = [];
 let roundResults = [];
@@ -11,12 +12,18 @@ function playGame() {
     playerScore = 0;
     computerScore = 0;
     clearStyle('.btn-start','active');
+    document.querySelector('.score-board > .middle-column').innerText = '';
+    updateScore('player', 0);
+    updateScore('computer', 0);
 
 // Determine which input the user clicks
     bpsButtons.forEach(button => {
-        button.removeAttribute('disabled','');
-        button.classList.add('active');
-        button.addEventListener('click', playRound);
+        if(button.id !== 'computer') {
+            button.removeAttribute('disabled','');
+            button.parentElement.classList.remove('disabled');
+            button.parentElement.classList.add('active');
+            button.addEventListener('click', playRound);
+        }
     });
 }
 
@@ -24,6 +31,7 @@ function playRound() {
     const button = this;
     const playerPlay = button.id.valueOf();
     const computerPlay = determineComputerPlay();
+    updateSelection('computer', computerPlay);
 
 // populate round results
     const roundResult = determineWinner(playerPlay, computerPlay);
@@ -33,23 +41,87 @@ function playRound() {
     computerResults.unshift([computerPlay, computerScore]);
     roundResults.unshift(roundResult);
 
+    // stylize boards
+    if(roundResult !== 'tie') {
+        stylizeWinnerBoard(button, roundResult);
+    }
+
+    //animate boards
+    animateSelections(button);
+    setTimeout(() => {
+        animateSelections(button);
+        clearStyle('.bps-button', 'winner');
+    }, 1500);
+
 // calculate stats - total rounds; total r,b,s; ratio r,b,s; wins/losses
 
 // populate boards
-    updateBoards('player', playerPlay, playerScore);
-    updateBoards('computer', computerPlay, computerScore);
+    updateScore('player', playerScore);
+    updateScore('computer', computerScore);
     updateResults(playerResults[0], computerResults[0], roundResults[0]);
-
-// stylize boards
-    clearStyle('.play-board > div', 'winner');
-    if(roundResult !== 'tie') {
-        stylizeWinnerBoard(roundResult);
-    }
 
 // determine if game winner decided yet
     if(playerScore === SCORE_TO_WIN || computerScore === SCORE_TO_WIN) {
         (playerScore === SCORE_TO_WIN) ? declareWinner('player') : declareWinner('computer');
+
+
+
+        // drawChart('player', playerResults);
+        // drawChart('computer', computerResults);
     }
+    round++;
+}
+
+function animateSelections(clicked) {
+    bpsButtons.forEach(button => {
+        button.toggleAttribute('disabled');
+        if(button !== clicked) {
+            button.parentElement.classList.toggle('active');
+            button.parentElement.classList.toggle('disabled');
+        }
+    });
+}
+
+function drawChart(entity, entityData) {;
+    let xValues = ['boulder', 'parchment', 'shears'];
+    let yValues = [0, 0, 0];
+    for(let i = 0; i < entityData.length; i++) {
+        switch (entityData[i][0]) {
+            case 'boulder':
+                yValues[0]++;
+                break;
+            case 'parchment':
+                yValues[1]++;
+                break;
+            case 'shears':
+                yValues[2]++;
+                break;
+        }
+    }
+    let barColors = [
+    "#563f46",
+    "#8ca3a3",
+    "#484f4f"
+    ];
+
+    new Chart(`${entity}Pie`, {
+    type: "pie",
+    data: {
+        labels: xValues,
+        datasets: [{
+        backgroundColor: barColors,
+        data: yValues
+        }]
+    },
+    options: {
+        title: {
+        display: true,
+        responsive: true,
+        maintainAspectRatio: false,
+        text: "BPS Selection"
+        }
+    }
+    });
 }
 
 function declareWinner(winner) {
@@ -72,8 +144,8 @@ function declareWinner(winner) {
     });
 }
 
-function stylizeWinnerBoard(winner) {
-    const winnerBoard = document.querySelector(`.play-board > .${winner}`);
+function stylizeWinnerBoard(board, winner) {
+    const winnerBoard = (winner === 'player') ? board : document.querySelector(`.${winner} > .bps-button`);
     winnerBoard.classList.add('winner');
 }
 
@@ -82,10 +154,13 @@ function clearStyle(query,classToRemove) {
     els.forEach(el => el.classList.remove(classToRemove));
 }
 
-function updateBoards(entity, entitySelection, entityScore) {
+function updateScore(entity, entityScore) {
+    document.querySelector(`.${entity} > .score`).innerText = `${entityScore}`;
+}
+
+function updateSelection(entity, entitySelection) {
     document.querySelector(`.${entity} > .selection`).src =`images/${entitySelection}.svg`;
     document.querySelector(`.${entity} > .caption`).innerText = `${entitySelection}`;
-    document.querySelector(`.${entity} > .score`).innerText = `${entityScore}`;
 }
 
 function updateResults(playerData, computerData, resultData) {
@@ -97,28 +172,33 @@ function updateResults(playerData, computerData, resultData) {
     }
     
     const tRow = document.createElement('tr');
-    const tDataPlayer = document.createElement('td');
+    const tdPlayerPlay = document.createElement('td');
+    const tdPlayerScore = document.createElement('td');
     const tDataResult = document.createElement('td');
-    const tDataComputer = document.createElement('td');
+    const tdComputerPlay = document.createElement('td');
+    const tdComputerScore = document.createElement('td');
 
-    tDataPlayer.innerText = `${playerData[0]}`;
-    tDataResult.innerText = `[${playerData[1]}]   ===   [${computerData[1]}]`;
-    tDataComputer.innerText = `${computerData[0]}`;
+    tdPlayerPlay.innerText = `${playerData[0]}`;
+    tdPlayerScore.innerText = `[ ${playerData[1]} ]`;
+    tDataResult.innerText = `Round: ${round}`;
+    tdComputerScore.innerText = `[ ${computerData[1]} ]`
+    tdComputerPlay.innerText = `${computerData[0]}`;
 
     if(resultData !== 'tie') {
-        
         if(resultData === 'player') {
-            tDataPlayer.classList.add('highlight');
-            tDataResult.innerText =  `[${playerData[1]}]   <==   [${computerData[1]}]`; //⏮⏪◀⬅        
+            tdPlayerPlay.classList.add('highlight')
+            tdPlayerScore.classList.add('highlight')
          } else {
-            tDataComputer.classList.add('highlight');
-            tDataResult.innerText = `[${playerData[1]}]   ==>   [${computerData[1]}]`; //⏭⏩▶➡
+            tdComputerPlay.classList.add('highlight');
+            tdComputerScore.classList.add('highlight');
          }
     }
 
-    tRow.appendChild(tDataPlayer);
+    tRow.appendChild(tdPlayerPlay);
+    tRow.appendChild(tdPlayerScore);
     tRow.appendChild(tDataResult);
-    tRow.appendChild(tDataComputer);
+    tRow.appendChild(tdComputerScore);
+    tRow.appendChild(tdComputerPlay);
 
     resultsTable.insertBefore(tRow,resultsTable.children[0]);
 }

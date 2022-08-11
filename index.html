@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fondamento">
     <script src="main.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
     <title>Rock, Paper, Scissors</title>
 </head>
@@ -22,25 +23,14 @@
 <!-- scoreboard -->
     <div class="boards">
         <div class="board score-board">
-            <div class="player">
+            <div class="player outer-column">
                 <h3>Player</h3>
                 <div class="score">0</div>
             </div>
             <div class="middle-column"></div>
-            <div class="computer">
+            <div class="computer outer-column">
                 <h3>Computer</h3>
                 <div class="score">0</div>
-            </div>
-        </div>
-        <div class="board play-board">
-            <div class="player">
-                <img src="images/bouncing-ball.svg" class="selection">
-                <p class="caption">Waiting on user input...</p>
-            </div>
-            <div class="middle-column"></div>
-            <div class="computer">
-                <img src="images/bouncing-ball.svg" class="selection">
-                <p class="caption">Calculating opponent input...</p>
             </div>
         </div>
         <div class="header">
@@ -50,9 +40,11 @@
             <table class="results-table">
                 <thead>
                     <tr>
-                        <th>Player</th>
-                        <th></th>
-                        <th>Computer</th>
+                        <th style="width: 30%">Player</th>
+                        <th style="width: 10%">Score</th>
+                        <th style="width: 20%"></th>
+                        <th style="width: 10%">Score</th>
+                        <th style="width: 30%">Computer</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,13 +54,31 @@
         <div class="board buttons">
             <div>
                 <div class="bps-inputs">
-                    <input type="image" src="images/boulder.svg" name="boulder" id="boulder" width="200px" disabled class="bps-button"/>
-                    <input type="image" src="images/parchment.svg" name="parchment" id="parchment" width="200px" disabled class="bps-button"/>
-                    <input type="image" src="images/shears.svg" name="shears" id="shears" width="200px" disabled class="bps-button"/>
+                    <div class="input player boulder disabled">
+                        <input type="image" src="images/boulder.svg" name="boulder" id="boulder" disabled class="bps-button"/>
+                        <p>Boulder</p>
+                    </div>
+                    <div class="input player parchment disabled">
+                        <input type="image" src="images/parchment.svg" name="parchment" id="parchment" disabled class="bps-button"/>
+                        <p>Parchment</p>
+                    </div>
+                    <div class="input player shears disabled">
+                        <input type="image" src="images/shears.svg" name="shears" id="shears" disabled class="bps-button"/>
+                        <p>Shears</p>
+                    </div>
+                    <div class="input spacer disabled"></div>
+                    <div class="input computer disabled">
+                        <input type="image" src="images/boulder.svg" name="computer" id="computer" disabled class="bps-button selection"/>
+                        <p class="caption"></p>
+                    </div>
                 </div>
-                <button class="btn-start active" name="btnStart" id="btnStart" onclick="playGame()" >Start Game</button>
+                <div style="display:flex;width:100%"><button class="btn-start active" name="btnStart" id="btnStart" onclick="playGame()" >Start Game</button></div>
             </div>
         </div>
+        <!-- <div class="board charts">
+            <div class="chart"><canvas id="playerPie" style="position: relative"></canvas></div>
+            <div class="chart"><canvas id="computerPie" style="position: relative"></canvas></div>
+        </div> -->
     </div>
 
 <!-- display charts ? -->

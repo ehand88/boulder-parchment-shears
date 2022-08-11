@@ -35,11 +35,12 @@ body {
 .bps-inputs {
     display: flex;
     justify-content: space-between;
+    height: 150px;
+    margin-bottom: 32px;
 }
 
 .bps-button {
-    width: 128px;
-    transform:scale(0);
+    max-width: 120px;
     transition: all 0.2s;
 }
 
@@ -49,40 +50,69 @@ body {
     font-size: 32px;
     background-color: #9fa9a3;
     color: #f0f0f0;
-    transform:scale(0);
+    opacity: 0;
     transition: all 0.2s;
     font-family: inherit;
     font-weight: bold;
+    justify-self: center;
 }
 
 .active {
-    transform: scale(1);
+    /* transition: transform 0s, width 0.5s, background-color 0.2s; */
+    /* transform: scale(1); */
+    width: 100%;
+    flex: 1;
+    opacity: 1;
 }
 
-.bps-button.active:hover {
-    transform: scale(1.2);
-    filter: drop-shadow(6px 10px 4px rgb(0 0 0 / 0.4));
+.active > .bps-button:hover {
+    /* transform: scale(1.1); */
+    /* background-color: #9fa9a3; */
+    filter: drop-shadow(0 0 8px #9fa9a3);
+    /* filter: drop-shadow(2px 4px 4px rgb(0 0 0 / 0.4)); */
     /* change svg color ref: https://stackoverflow.com/questions/22252472/how-to-change-the-color-of-an-svg-element */
     /* filter: invert(86%) sepia(17%) saturate(5329%) hue-rotate(347deg) brightness(91%) contrast(85%); */
 }
 
-.player, .computer {
+.chart {
+    height: 90%;
+    width: 40%;
+}
+
+.disabled {
+    /* transition: all 0; */
+    /* transform: scale(0%, 100%); */
+    width: 0%;
+    display: none;
+    flex: 0;
+    opacity: 0;
+}
+
+.flex {
+    display: flex;
+}
+
+.input {
+    transition: all 0.5s;
+    /* transition: width 0.5s, transform 0s, background-color 0.2s; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.play-board {
+    height: 150px;
+}
+
+.outer-column {
     display: flex;
     flex-direction: column;
     flex: 3;
-    padding: 4px;
+    /* padding: 4px; */
 }
 
 .middle-column {
     flex: 2;
-}
-
-.play-board {
-    
-}
-
-.selection {
-    height: 64px;
 }
 
 .results {
@@ -119,10 +149,9 @@ thead {
     color: white;
     letter-spacing: 2px;
     height: 30px;
-
 }
 
-th, td {
-    width: 30%;
-}
+/* th, td {
+    width: 20%;
+} */
 
