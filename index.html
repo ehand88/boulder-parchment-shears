@@ -15,9 +15,7 @@
 <!-- header explaining the rules -->
     <div class="header">
         <h1>Boulder, Parchment, Shears</h1>
-        <p>Hear ye! A bout of Boulder, Parchment, Shears has been declared. The rules are quite simple:</p>
-        <p>Boulder beats Shears. Parchment beats Boulder. Shears beats Parchment.<p>
-        <p>Choose wisely!</p>
+        <p><b>Boulder</b> beats Shears. <b>Parchment</b> beats Boulder. <b>Shears</b> beats Parchment.<p>
     </div>
 
 <!-- scoreboard -->
@@ -36,24 +34,38 @@
         <div class="header">
             <h2>Results</h2>
         </div>
+<!-- table of results, scrollable -->
         <div class="board results">
             <table class="results-table">
-                <thead>
+                <thead class="invert">
                     <tr>
-                        <th style="width: 30%">Player</th>
-                        <th style="width: 10%">Score</th>
-                        <th style="width: 20%"></th>
-                        <th style="width: 10%">Score</th>
-                        <th style="width: 30%">Computer</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                        <th></th>
+                        <th>Score</th>
+                        <th>Computer</th>
                     </tr>
                 </thead>
                 <tbody>
                 </tbody>
             </table>
         </div>
+<!-- input board, start button and player selection buttons -->
         <div class="board buttons">
-            <div>
+            <div style="width: 100%">
+                <div class="board-header invert">
+                    <div class="player">
+                        Player Selection
+                    </div>
+                    <div class="computer">
+                        Computer Selection
+                    </div>
+                </div>
+                <div class="output">May the best hand win!</div>
                 <div class="bps-inputs">
+                    <div class="start active">
+                        <button class="btn-start" name="btnStart" id="btnStart" onclick="playGame()" >Start Game</button>
+                    </div>
                     <div class="input player boulder disabled">
                         <input type="image" src="images/boulder.svg" name="boulder" id="boulder" disabled class="bps-button"/>
                         <p>Boulder</p>
@@ -72,15 +84,12 @@
                         <p class="caption"></p>
                     </div>
                 </div>
-                <div style="display:flex;width:100%"><button class="btn-start active" name="btnStart" id="btnStart" onclick="playGame()" >Start Game</button></div>
             </div>
         </div>
-        <!-- <div class="board charts">
-            <div class="chart"><canvas id="playerPie" style="position: relative"></canvas></div>
-            <div class="chart"><canvas id="computerPie" style="position: relative"></canvas></div>
-        </div> -->
     </div>
-
-<!-- display charts ? -->
+    <div class="footer invert">
+        <p>designed by ehand</p>
+        <a href="https://github.com/ehand88"><img src="images/github-light.png" alt="github logo"></a>
+    </div>
 </body>
 </html>
